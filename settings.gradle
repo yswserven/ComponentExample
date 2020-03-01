@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':loginmodule'
 rootProject.name='ComponentExample'
