@@ -1,10 +1,13 @@
 package com.custom.component;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.custom.loginmodule.LoginModel;
+import com.custom.minemodule.LoginActivity;
+import com.custom.minemodule.LoginModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,5 +25,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "这个不是组件化，无法使用组件的东西", Toast.LENGTH_SHORT).show();
         }
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, LoginActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
 }

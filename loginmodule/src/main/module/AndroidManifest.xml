@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.custom.loginmodule">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.custom.minemodule">
 
-    <application android:name=".LoginApplication">
-        <activity android:name=".LoginActivity">
+    <application android:name="com.custom.minemodule.LoginApplication"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name="com.custom.minemodule.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

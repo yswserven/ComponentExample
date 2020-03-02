@@ -14,7 +14,8 @@ ext {
 
     appId = [
             "app"        : "com.custom.component",
-            "LoginModule": "com.custom.loginmodule"
+            "LoginModule": "com.custom.loginmodule",
+            "MineModule": "com.custom.minemodule"
     ]
 
     version = [
