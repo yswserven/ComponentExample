@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.custom.minemodule.MineActivity">
 
     <TextView
@@ -12,4 +14,26 @@
         android:layout_centerVertical="true"
         android:text="这个是我的界面"
         android:textSize="15dp" />
-</RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="jumpLogin"
+        android:text="跳转至登录界面"
+        android:textSize="15dp">
+
+    </Button>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="jumpMain"
+        android:text="跳转至首界面"
+        android:textSize="15dp">
+
+    </Button>
+
+
+</LinearLayout>
