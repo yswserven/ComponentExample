@@ -26,8 +26,6 @@ public class LoadExtraBuilder {
     private MethodSpec.Builder builder;
     private Elements elementUtils;
     private Types typeUtils;
-
-    //
     private TypeMirror parcelableType;
     private TypeMirror iServiceType;
 
@@ -42,10 +40,8 @@ public class LoadExtraBuilder {
 
     public void setElementUtils(Elements elementUtils) {
         this.elementUtils = elementUtils;
-        parcelableType = elementUtils.getTypeElement(Consts
-                .PARCELABLE).asType();
-        iServiceType = elementUtils.getTypeElement(Consts
-                .ISERVICE).asType();
+        parcelableType = elementUtils.getTypeElement(Consts.PARCELABLE).asType();
+        iServiceType = elementUtils.getTypeElement(Consts.ISERVICE).asType();
     }
 
     public void setTypeUtils(Types typeUtils) {
@@ -102,20 +98,15 @@ public class LoadExtraBuilder {
      * @param element
      */
     private void addObjectStatement(String statement, String fieldName, String extraName,
-                                    TypeMirror typeMirror,
-                                    Element element) {
+                                    TypeMirror typeMirror, Element element) {
         //Parcelable
         if (typeUtils.isSubtype(typeMirror, parcelableType)) {
             statement += "getParcelableExtra($S)";
         } else if (typeMirror.toString().equals(Consts.STRING)) {
             statement += "getStringExtra($S)";
         } else if (typeUtils.isSubtype(typeMirror, iServiceType)) {
-//            TestService testService = (TestService) DNRouter.getInstance().build("/main/service1")
-//                    .navigation();
-//            testService.test();
             statement = "t." + fieldName + " = ($T) $T.getInstance().build($S).navigation()";
-            builder.addStatement(statement, TypeName.get(element.asType()), Consts.ROUTER,
-                    extraName);
+            builder.addStatement(statement, TypeName.get(element.asType()), Consts.ROUTER, extraName);
             return;
         } else {
             //List
@@ -125,19 +116,15 @@ public class LoadExtraBuilder {
                 //list 或 arraylist
                 ClassName rawType = ((ParameterizedTypeName) typeName).rawType;
                 //泛型类型
-                List<TypeName> typeArguments = ((ParameterizedTypeName) typeName)
-                        .typeArguments;
-                if (!rawType.toString().equals(Consts.ARRAYLIST) && !rawType.toString()
-                        .equals(Consts.LIST)) {
-                    throw new RuntimeException("Not Support Inject Type:" + typeMirror + " " +
-                            element);
+                List<TypeName> typeArguments = ((ParameterizedTypeName) typeName).typeArguments;
+                if (!rawType.toString().equals(Consts.ARRAYLIST) && !rawType.toString().equals(Consts.LIST)) {
+                    throw new RuntimeException("Not Support Inject Type:" + typeMirror + " " + element);
                 }
                 if (typeArguments.isEmpty() || typeArguments.size() != 1) {
                     throw new RuntimeException("List Must Specify Generic Type:" + typeArguments);
                 }
                 TypeName typeArgumentName = typeArguments.get(0);
-                TypeElement typeElement = elementUtils.getTypeElement(typeArgumentName
-                        .toString());
+                TypeElement typeElement = elementUtils.getTypeElement(typeArgumentName.toString());
                 // Parcelable 类型
                 if (typeUtils.isSubtype(typeElement.asType(), parcelableType)) {
                     statement += "getParcelableArrayListExtra($S)";
@@ -149,8 +136,7 @@ public class LoadExtraBuilder {
                     throw new RuntimeException("Not Support Generic Type : " + typeMirror + " " + element);
                 }
             } else {
-                throw new RuntimeException("Not Support Extra Type : " + typeMirror + " " +
-                        element);
+                throw new RuntimeException("Not Support Extra Type : " + typeMirror + " " + element);
             }
         }
         builder.addStatement(statement, extraName);
@@ -207,9 +193,7 @@ public class LoadExtraBuilder {
                     throw new RuntimeException("Not Support Extra Type:" + typeMirror + " " +
                             element);
                 }
-                statement = "$T[] " + fieldName + " = t.getIntent()" +
-                        ".getParcelableArrayExtra" +
-                        "($S)";
+                statement = "$T[] " + fieldName + " = t.getIntent()" + ".getParcelableArrayExtra" + "($S)";
                 builder.addStatement(statement, parcelableType, extraName);
                 builder.beginControlFlow("if( null != $L)", fieldName);
                 statement = defaultValue + " = new $T[" + fieldName + ".length]";

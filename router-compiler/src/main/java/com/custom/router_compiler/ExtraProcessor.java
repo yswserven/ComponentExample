@@ -3,7 +3,7 @@ package com.custom.router_compiler;
 import com.custom.router_annotation.annotation.Extra;
 import com.custom.router_compiler.utils.Consts;
 import com.custom.router_compiler.utils.LoadExtraBuilder;
-import com.custom.router_compiler.utils.Log;
+import com.custom.router_compiler.utils.MyLog;
 import com.custom.router_compiler.utils.Utils;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
@@ -45,36 +45,18 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({Consts.ANN_TYPE_Extra})
 public class ExtraProcessor extends AbstractProcessor {
-    /**
-     * 节点工具类 (类、函数、属性都是节点)
-     */
     private Elements elementUtils;
-
-    /**
-     * type(类信息)工具类
-     */
     private Types typeUtils;
-    /**
-     * 类/资源生成器
-     */
     private Filer filerUtils;
-
-    /**
-     * 记录所有需要注入的属性 key:类节点 value:需要注入的属性节点集合
-     */
+    //记录所有需要注入的属性 key:类节点 value:需要注入的属性节点集合
     private Map<TypeElement, List<Element>> parentAndChild = new HashMap<>();
-    private Log log;
+    private MyLog log;
 
-    /**
-     * 初始化 从 {@link ProcessingEnvironment} 中获得一系列处理器工具
-     *
-     * @param processingEnvironment
-     */
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
         //获得apt的日志输出
-        log = Log.newLog(processingEnvironment.getMessager());
+        log = MyLog.newLog(processingEnvironment.getMessager());
         elementUtils = processingEnv.getElementUtils();
         typeUtils = processingEnvironment.getTypeUtils();
         filerUtils = processingEnv.getFiler();
@@ -123,7 +105,7 @@ public class ExtraProcessor extends AbstractProcessor {
                 }
                 // 生成java类名
                 String extraClassName = rawClassElement.getSimpleName() + Consts.NAME_OF_EXTRA;
-                // 生成 XX$$Autowired
+                // 生成 XX$$AutoWried
                 JavaFile.builder(className.packageName(), TypeSpec.classBuilder(extraClassName)
                         .addSuperinterface(ClassName.get(IExtra))
                         .addModifiers(PUBLIC).addMethod(loadExtra.build()).build())
@@ -138,9 +120,8 @@ public class ExtraProcessor extends AbstractProcessor {
      * 记录需要生成的类与属性
      *
      * @param elements
-     * @throws IllegalAccessException
      */
-    private void categories(Set<? extends Element> elements) throws IllegalAccessException {
+    private void categories(Set<? extends Element> elements) {
         for (Element element : elements) {
             //获得父节点 (类)
             TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();

@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void jumpLogin(View view) {
-        Router.getInstance().build(RouterPath.LOGIN_MAIN).navigation();
+        Router.getInstance().build(RouterPath.LOGIN_MAIN).withString("name", "MainActivity传过来的名字").navigation();
     }
 
     public void jumpMine(View view) {
-        Router.getInstance().build(RouterPath.MINE_MAIN).navigation();
+        Router.getInstance().build(RouterPath.MINE_MAIN).withInt("age", 30).navigation();
     }
 }
