@@ -13,6 +13,12 @@ android {
         versionName cfg.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("boolean", "isModule", String.valueOf(isModule))
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -44,4 +50,8 @@ dependencies {
 
     implementation project(':common')
     annotationProcessor project(':router-compiler')
+    if (isModule){
+        implementation project(':loginmodule')
+        implementation project(':minemodule')
+    }
 }

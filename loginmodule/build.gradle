@@ -17,7 +17,12 @@ android {
         versionName cfg.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        buildConfigField("boolean", "isModule", String.valueOf(isModule))
+        buildConfigField("boolean","isModule",String.valueOf(isModule))
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
 
         if (!isModule) {
             applicationId appId["LoginModule"]
@@ -61,5 +66,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     annotationProcessor project(':router-compiler')
+    implementation project(':common')
 }

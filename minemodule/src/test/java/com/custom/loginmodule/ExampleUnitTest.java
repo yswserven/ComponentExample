@@ -1,4 +1,4 @@
-package com.custom.minemodule;
+package com.custom.loginmodule;
 
 import org.junit.Test;
 

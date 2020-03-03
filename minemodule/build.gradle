@@ -11,7 +11,6 @@ android {
     compileSdkVersion cfg.compileSdkVersion
     buildToolsVersion cfg.buildToolsVersion
 
-
     defaultConfig {
         minSdkVersion cfg.minSdkVersion
         targetSdkVersion cfg.targetSdkVersion
@@ -19,7 +18,12 @@ android {
         versionName cfg.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        buildConfigField("boolean", "isModule", String.valueOf(isModule))
+        buildConfigField("boolean","isModule",String.valueOf(isModule))
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
 
         if (!isModule) {
             applicationId appId["MineModule"]
@@ -41,12 +45,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("boolean", "LOG_DEBUG", "false")
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("boolean", "LOG_DEBUG", "true")
         }
     }
 
@@ -65,5 +67,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     annotationProcessor project(':router-compiler')
+    implementation project(':common')
 }
