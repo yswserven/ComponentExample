@@ -150,8 +150,7 @@ public class LoadExtraBuilder {
      * @param typeMirror
      * @param element
      */
-    private void addArrayStatement(String statement, String fieldName, String extraName, TypeMirror
-            typeMirror, Element element) {
+    private void addArrayStatement(String statement, String fieldName, String extraName, TypeMirror typeMirror, Element element) {
         //数组
         switch (typeMirror.toString()) {
             case Consts.BOOLEANARRAY:
@@ -186,23 +185,18 @@ public class LoadExtraBuilder {
                 String defaultValue = "t." + fieldName;
                 //object数组 componentType获得object类型
                 ArrayTypeName arrayTypeName = (ArrayTypeName) ClassName.get(typeMirror);
-                TypeElement typeElement = elementUtils.getTypeElement(arrayTypeName
-                        .componentType.toString());
+                TypeElement typeElement = elementUtils.getTypeElement(arrayTypeName.componentType.toString());
                 //是否为 Parcelable 类型
                 if (!typeUtils.isSubtype(typeElement.asType(), parcelableType)) {
-                    throw new RuntimeException("Not Support Extra Type:" + typeMirror + " " +
-                            element);
+                    throw new RuntimeException("Not Support Extra Type:" + typeMirror + " " + element);
                 }
                 statement = "$T[] " + fieldName + " = t.getIntent()" + ".getParcelableArrayExtra" + "($S)";
                 builder.addStatement(statement, parcelableType, extraName);
                 builder.beginControlFlow("if( null != $L)", fieldName);
                 statement = defaultValue + " = new $T[" + fieldName + ".length]";
                 builder.addStatement(statement, arrayTypeName.componentType)
-                        .beginControlFlow("for (int i = 0; i < " + fieldName + "" +
-                                ".length; " +
-                                "i++)")
-                        .addStatement(defaultValue + "[i] = ($T)" + fieldName + "[i]",
-                                arrayTypeName.componentType)
+                        .beginControlFlow("for (int i = 0; i < " + fieldName + "" + ".length; " + "i++)")
+                        .addStatement(defaultValue + "[i] = ($T)" + fieldName + "[i]", arrayTypeName.componentType)
                         .endControlFlow();
                 builder.endControlFlow();
                 return;

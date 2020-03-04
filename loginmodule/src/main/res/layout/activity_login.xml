@@ -34,4 +34,24 @@
 
     </Button>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="jumpPhone"
+        android:text="跳转至手机号码界面"
+        android:textSize="15dp">
+
+    </Button>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="jumpMessage"
+        android:text="跳转至短信验证码界面"
+        android:textSize="15dp">
+
+    </Button>
+
 </LinearLayout>

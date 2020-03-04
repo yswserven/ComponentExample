@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.custom.common.RouterPath;
+import com.custom.common.model.RouterPath;
 import com.custom.router_annotation.annotation.Extra;
 import com.custom.router_annotation.annotation.Route;
 import com.custom.router_api.core.Router;
@@ -36,5 +36,13 @@ public class LoginActivity extends AppCompatActivity {
 
     public void jumpMain(View view) {
         Router.getInstance().build(RouterPath.APP_MAIN).navigation();
+    }
+
+    public void jumpPhone(View view) {
+        Router.getInstance().build(RouterPath.LOGIN_PHONE).navigation();
+    }
+
+    public void jumpMessage(View view) {
+        Router.getInstance().build(RouterPath.LOGIN_MESSAGE).navigation();
     }
 }

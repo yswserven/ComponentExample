@@ -5,13 +5,13 @@ import com.squareup.javapoet.ClassName;
 /**
  * Created by: Ysw on 2020/3/3.
  */
-public class Consts {
+public final class Consts {
 
     public static final ClassName ROUTER = ClassName.get("com.custom.router_api.core", "Route");
 
     public static final String ARGUMENTS_NAME = "moduleName";
     public static final String ANN_TYPE_ROUTE = "com.custom.router_annotation.annotation.Route";
-    public static final String ANN_TYPE_Extra = "com.custom.router_annotation.annotation.Extra";
+    public static final String ANN_TYPE_EXTRA = "com.custom.router_annotation.annotation.Extra";
 
 
     public static final String IROUTE_GROUP = "com.custom.router_api.interf.IRouterGroup";

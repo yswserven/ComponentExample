@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.custom.loginmodule">
 
     <application>
-        <activity android:name=".LoginActivity">
-
-        </activity>
+        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".PhoneNumberActivity" />
+        <activity android:name=".LoginActivity" />
     </application>
+
 </manifest>

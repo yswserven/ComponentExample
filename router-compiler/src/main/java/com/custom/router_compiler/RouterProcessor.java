@@ -110,7 +110,6 @@ public class RouterProcessor extends AbstractProcessor {
             RouteMeta routeMeta;
             // 使用Route注解的类信息
             TypeMirror tm = element.asType();
-            log.i("Route Class: " + tm.toString());
             Route route = element.getAnnotation(Route.class);
             //是否是 Activity 使用了Route注解
             if (typeUtils.isSubtype(tm, type_Activity)) {
@@ -121,7 +120,11 @@ public class RouterProcessor extends AbstractProcessor {
                 throw new RuntimeException("[Just Support Activity/IService Route] :" + element);
             }
             //分组信息记录  groupMap <Group分组,RouteMeta路由信息> 集合
-            categories(routeMeta);
+            try {
+                categories(routeMeta);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         //生成类需要实现的接口
@@ -142,8 +145,7 @@ public class RouterProcessor extends AbstractProcessor {
         );
         ParameterSpec groupParamSpec = ParameterSpec.builder(atlas, "atlas").build();
         for (Map.Entry<String, List<RouteMeta>> entry : groupMap.entrySet()) {
-            MethodSpec.Builder loadIntoMethodOfGroupBuilder = MethodSpec.methodBuilder
-                    (Consts.METHOD_LOAD_INTO)
+            MethodSpec.Builder loadIntoMethodOfGroupBuilder = MethodSpec.methodBuilder(Consts.METHOD_LOAD_INTO)
                     .addAnnotation(Override.class)
                     .addModifiers(PUBLIC)
                     .addParameter(groupParamSpec);
@@ -168,7 +170,6 @@ public class RouterProcessor extends AbstractProcessor {
                             .addMethod(loadIntoMethodOfGroupBuilder.build())
                             .build()
             ).build().writeTo(filerUtils);
-            log.i("Generated RouteGroup: " + Consts.PACKAGE_OF_GENERATE_FILE + "." + groupClassName);
             rootMap.put(groupName, groupClassName);
         }
     }
@@ -205,9 +206,14 @@ public class RouterProcessor extends AbstractProcessor {
         log.i("Generated RouteRoot: " + Consts.PACKAGE_OF_GENERATE_FILE + "." + rootClassName);
     }
 
-    private void categories(RouteMeta routeMeta) {
+
+    /**
+     * 将路由地址进行分组处理
+     *
+     * @author Ysw created at 2020/3/4 11:19
+     */
+    private void categories(RouteMeta routeMeta) throws Exception {
         if (routeVerify(routeMeta)) {
-            log.i("Group Info, Group Name = " + routeMeta.getGroup() + ", Path = " + routeMeta.getPath());
             List<RouteMeta> routeMetas = groupMap.get(routeMeta.getGroup());
             if (Utils.isEmpty(routeMetas)) {
                 List<RouteMeta> routeMetaSet = new ArrayList<>();
@@ -217,14 +223,14 @@ public class RouterProcessor extends AbstractProcessor {
                 routeMetas.add(routeMeta);
             }
         } else {
-            log.i("Group Info Error: " + routeMeta.getPath());
+            throw new Exception("路由地址 path 不能为空，必须以/开头，必须要有分组");
         }
     }
 
     /**
-     * 验证路由信息必须存在path(并且设置分组)
+     * 验证路由地址是否合理
      *
-     * @param meta raw meta
+     * @author Ysw created at 2020/3/4 11:20
      */
     private boolean routeVerify(RouteMeta meta) {
         String path = meta.getPath();

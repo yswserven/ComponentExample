@@ -5,7 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.custom.common.RouterPath;
+import com.custom.common.interf.CommonInterface;
+import com.custom.common.model.RouterPath;
 import com.custom.router_annotation.annotation.Extra;
 import com.custom.router_annotation.annotation.Route;
 import com.custom.router_api.core.Router;
@@ -33,5 +34,14 @@ public class MineActivity extends AppCompatActivity {
 
     public void jumpMain(View view) {
         Router.getInstance().build(RouterPath.APP_MAIN).navigation();
+    }
+
+    public void jumpInfo(View view) {
+        Router.getInstance().build(RouterPath.MINE_INFO).navigation();
+    }
+
+    public void getLoginInfo(View view) {
+        CommonInterface navigation = (CommonInterface) Router.getInstance().build(RouterPath.LOGIN_LOGIN_INFO).navigation();
+        navigation.contact("这个是 MineActivity 的 msg ");
     }
 }

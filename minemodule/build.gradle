@@ -18,7 +18,7 @@ android {
         versionName cfg.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-        buildConfigField("boolean","isModule",String.valueOf(isModule))
+        buildConfigField("boolean", "isModule", String.valueOf(isModule))
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [moduleName: project.getName()]

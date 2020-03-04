@@ -36,4 +36,14 @@
         android:textColor="@color/colorPrimary"
         android:textSize="15dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="getLoginInfo"
+        android:text="调用 LoginModule 的方法"
+        android:textSize="15dp">
+
+    </Button>
+
 </LinearLayout>

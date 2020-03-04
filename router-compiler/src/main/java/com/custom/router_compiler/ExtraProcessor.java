@@ -42,12 +42,12 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 
 @AutoService(Processor.class)
 @SupportedOptions(Consts.ARGUMENTS_NAME)
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
-@SupportedAnnotationTypes({Consts.ANN_TYPE_Extra})
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedAnnotationTypes({Consts.ANN_TYPE_EXTRA})
 public class ExtraProcessor extends AbstractProcessor {
     private Elements elementUtils;
     private Types typeUtils;
-    private Filer filerUtils;
+    private Filer filer;
     //记录所有需要注入的属性 key:类节点 value:需要注入的属性节点集合
     private Map<TypeElement, List<Element>> parentAndChild = new HashMap<>();
     private MyLog log;
@@ -59,7 +59,7 @@ public class ExtraProcessor extends AbstractProcessor {
         log = MyLog.newLog(processingEnvironment.getMessager());
         elementUtils = processingEnv.getElementUtils();
         typeUtils = processingEnvironment.getTypeUtils();
-        filerUtils = processingEnv.getFiler();
+        filer = processingEnv.getFiler();
     }
 
     @Override
@@ -77,6 +77,25 @@ public class ExtraProcessor extends AbstractProcessor {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 将使用了 Extra 注解的成员变量根据 TypeElement 或者 Activity 存放再 map 容器中
+     * Activity 名字可以通过 TypeElement 的 getSimpleName().toString() 获取
+     *
+     * @author Ysw created at 2020/3/4 10:40
+     */
+    private void categories(Set<? extends Element> elements) {
+        for (Element element : elements) {
+            TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
+            if (parentAndChild.containsKey(enclosingElement)) {
+                parentAndChild.get(enclosingElement).add(element);
+            } else {
+                List<Element> childs = new ArrayList<>();
+                childs.add(element);
+                parentAndChild.put(enclosingElement, childs);
+            }
+        }
     }
 
     private void generateAutoWired() throws IOException {
@@ -109,28 +128,7 @@ public class ExtraProcessor extends AbstractProcessor {
                 JavaFile.builder(className.packageName(), TypeSpec.classBuilder(extraClassName)
                         .addSuperinterface(ClassName.get(IExtra))
                         .addModifiers(PUBLIC).addMethod(loadExtra.build()).build())
-                        .build().writeTo(filerUtils);
-                log.i("Generated Extra: " + className.packageName() + "." + extraClassName);
-            }
-        }
-    }
-
-
-    /**
-     * 记录需要生成的类与属性
-     *
-     * @param elements
-     */
-    private void categories(Set<? extends Element> elements) {
-        for (Element element : elements) {
-            //获得父节点 (类)
-            TypeElement enclosingElement = (TypeElement) element.getEnclosingElement();
-            if (parentAndChild.containsKey(enclosingElement)) {
-                parentAndChild.get(enclosingElement).add(element);
-            } else {
-                List<Element> childs = new ArrayList<>();
-                childs.add(element);
-                parentAndChild.put(enclosingElement, childs);
+                        .build().writeTo(filer);
             }
         }
     }
